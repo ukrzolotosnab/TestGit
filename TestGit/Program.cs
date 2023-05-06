@@ -6,16 +6,31 @@
 //    В случае невозможности преодолеть любое из расстояний — программа должна вывести сообщение о невозможности полета по введенному маршруту.
 
 Console.WriteLine("Enter distance from A to B:");
-double.TryParse(Console.ReadLine(), out double dis1);
+double.TryParse(Console.ReadLine(), out double distanceAB);
 Console.WriteLine("Enter distence from B to C:");
-double.TryParse(Console.ReadLine(), out double dis2);
-Console.WriteLine("Enter weight og goods:");
-double.TryParse(Console.ReadLine(), out double goods);
+double.TryParse(Console.ReadLine(), out double distanceBC);
+Console.WriteLine("Enter weight of goods:");
+double.TryParse(Console.ReadLine(), out double weight);
 
-if (goods <= 500 && dis1 <= 300)
-{
-    double refueling = 300.0 - dis1;
-    Console.WriteLine($"You need have {refueling} liters of fuel");
-}
+const int tank = 300;
+int fuelConsumption;
+if (weight < 500) fuelConsumption = 1;
+else if (weight < 1000) fuelConsumption = 4;
+else if (weight < 1500) fuelConsumption = 7;
+else if (weight < 2000)  fuelConsumption = 9; 
+else fuelConsumption = -1;
+if (fuelConsumption == -1)
+    Console.WriteLine("Can't carry this weight");
 else
-    Console.WriteLine("It's not possible to fly this route");
+{
+    double fuelAB = distanceAB * fuelConsumption;
+    double fuelBC = distanceBC * fuelConsumption;
+    if (fuelAB > tank || fuelBC > tank)
+        Console.WriteLine("Insufficient fuel");    
+    else
+    {
+        double refuel = fuelAB + fuelBC - tank;
+        Console.WriteLine(refuel <= 0 ? "Don't need refuel" : $"You need to refuel {refuel} liters");
+    }
+} 
+
